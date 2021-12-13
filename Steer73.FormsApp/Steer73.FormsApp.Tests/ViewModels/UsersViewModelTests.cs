@@ -14,6 +14,7 @@ namespace Steer73.FormsApp.Tests.ViewModels
         [Test]
         public async Task InitializeFetchesTheData()
         {
+            //prepare
             var userService = new Mock<IUserService>();
             var messageService = new Mock<IMessageService>();
 
@@ -26,9 +27,14 @@ namespace Steer73.FormsApp.Tests.ViewModels
                 .Returns(Task.FromResult(Enumerable.Empty<User>()))
                 .Verifiable();
 
+            //act
             await viewModel.Initialize();
 
             userService.VerifyAll();
+
+            // Assert
+            //Assert.IsTrue(!result.IsError, result.ErrorMessage);
+            //Console.WriteLine(JsonConvert.SerializeObject(result.Result));
         }
 
         [Test]

@@ -11,6 +11,7 @@ namespace Steer73.FormsApp.Model
             new User { FirstName = "Jon", LastName = "Bennett" },
             new User { FirstName = "Alex", LastName = "Welding" },
             new User { FirstName = "Nick", LastName = "Waites" },
+            new User { FirstName = "Akinpelumi", LastName = "Akinlade" },
         };
 
         public async Task<IEnumerable<User>> GetUsers()

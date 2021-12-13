@@ -1,8 +1,65 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Steer73.FormsApp.Views.UsersView">
-    <ContentPage.Content>
-    </ContentPage.Content>
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	x:Class="Steer73.FormsApp.Views.UsersView">
+	<ContentPage.Content>
+        <StackLayout>
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="Black"
+                               HeightRequest="40"
+                               WidthRequest="40"/>
+            <Label Text="Fetching user. Please wait..."
+                   FontSize="Small"
+                   FontAttributes="Italic"
+                   HorizontalTextAlignment="Center"
+                   HorizontalOptions="Center"
+                   IsVisible="{Binding IsBusy}"/>
+            <ListView ItemsSource="{Binding Users}"
+				  IsPullToRefreshEnabled="True"
+                      IsVisible="{Binding ShowUser}"
+				  VerticalScrollBarVisibility="Never"
+                  SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Vertical">
+                                <Frame CornerRadius="10" 
+                                   HasShadow="False"
+                                   BackgroundColor="#E7E8F0" 
+									HorizontalOptions="Fill" 
+									Padding="10,5"
+									Margin="0,1">
+                                    <StackLayout HorizontalOptions="Fill">
+                                        <Frame HasShadow="True" 
+                                           BackgroundColor="White" 
+                                           HeightRequest="30"
+                                           WidthRequest="30"
+                                           Margin="2"
+                                           Padding="0"
+                                           CornerRadius="5">
+                                            <Label Text="{Binding Initial}"
+                                               VerticalOptions="Center" 
+                                               HorizontalOptions="Center"
+                                               FontSize="Medium" 
+                                               TextColor="Black"
+                                               FontAttributes="Bold"/>
+                                        </Frame>
+                                        <Label Text="{Binding FullName}" 
+                                           TextColor="Black" 
+                                           FontFamily="Bold" 
+                                           FontSize="Subtitle"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="StartAndExpand"
+                                           />
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+	</ContentPage.Content>
 </ContentPage>
