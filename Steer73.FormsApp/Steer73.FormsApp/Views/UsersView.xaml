@@ -1,65 +1,96 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
-	xmlns="http://xamarin.com/schemas/2014/forms"
-	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	x:Class="Steer73.FormsApp.Views.UsersView">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	        x:Class="Steer73.FormsApp.Views.UsersView"
+            Padding="10"
+            xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+            ios:Page.UseSafeArea="True"
+            Visual="Material">
 	<ContentPage.Content>
-        <StackLayout>
-            <ActivityIndicator IsVisible="{Binding IsBusy}"
+        <Grid RowSpacing="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackLayout Orientation="Vertical" Spacing="5">
+                <Label Text="List of Users"
+                   FontSize="16"
+                   TextColor="Black"/>
+                
+                <ActivityIndicator IsVisible="{Binding IsBusy}"
                                IsRunning="{Binding IsBusy}"
                                Color="Black"
-                               HeightRequest="40"
-                               WidthRequest="40"/>
-            <Label Text="Fetching user. Please wait..."
-                   FontSize="Small"
-                   FontAttributes="Italic"
-                   HorizontalTextAlignment="Center"
-                   HorizontalOptions="Center"
-                   IsVisible="{Binding IsBusy}"/>
-            <ListView ItemsSource="{Binding Users}"
-				  IsPullToRefreshEnabled="True"
-                      IsVisible="{Binding ShowUser}"
-				  VerticalScrollBarVisibility="Never"
-                  SeparatorVisibility="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
+                                               HorizontalOptions="CenterAndExpand"
+                                               VerticalOptions="CenterAndExpand"/>
+            </StackLayout>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                         RefreshColor="Black"
+                         Grid.Row="1"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding Users}"
+            VerticalScrollBarVisibility="Never"
+                            x:Name="listView"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Fill"
+                            SelectionMode="Single">
+                    <CollectionView.EmptyView>
+                        <StackLayout
+                        BackgroundColor="Transparent"
+                        Spacing="0"
+                            Orientation="Vertical"
+                        VerticalOptions="CenterAndExpand">
+                            <Label HorizontalOptions="CenterAndExpand"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding EmptyUser}"
+                                FontSize="18"
+                                   VerticalOptions="CenterAndExpand"
+                            TextColor="#4E4E4E" />
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
                             <StackLayout Orientation="Vertical">
                                 <Frame CornerRadius="10" 
                                    HasShadow="False"
                                    BackgroundColor="#E7E8F0" 
 									HorizontalOptions="Fill" 
 									Padding="10,5"
-									Margin="0,1">
-                                    <StackLayout HorizontalOptions="Fill">
+									Margin="0,3">
+                                    <Grid HorizontalOptions="Fill" ColumnSpacing="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
                                         <Frame HasShadow="True" 
+                                           Grid.Column="0"
                                            BackgroundColor="White" 
-                                           HeightRequest="30"
-                                           WidthRequest="30"
+                                           HeightRequest="40"
+                                           WidthRequest="40"
                                            Margin="2"
-                                           Padding="0"
+                                           Padding="3"
                                            CornerRadius="5">
                                             <Label Text="{Binding Initial}"
                                                VerticalOptions="Center" 
                                                HorizontalOptions="Center"
-                                               FontSize="Medium" 
+                                               FontSize="Subtitle" 
                                                TextColor="Black"
                                                FontAttributes="Bold"/>
                                         </Frame>
                                         <Label Text="{Binding FullName}" 
                                            TextColor="Black" 
                                            FontFamily="Bold" 
+                                               Grid.Column="1"
                                            FontSize="Subtitle"
                                            VerticalOptions="Center"
                                            HorizontalOptions="StartAndExpand"
                                            />
-                                    </StackLayout>
+                                    </Grid>
                                 </Frame>
                             </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
 	</ContentPage.Content>
 </ContentPage>

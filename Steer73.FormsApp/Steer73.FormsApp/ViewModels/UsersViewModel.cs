@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Steer73.FormsApp.Framework;
 using Steer73.FormsApp.Model;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace Steer73.FormsApp.ViewModels
 {
@@ -19,6 +20,7 @@ namespace Steer73.FormsApp.ViewModels
         {
             _userService = userService;
             _messageService = messageService;
+            RefreshCommand = new Command(async () => await RefreshCommandExecute());
         }
 
         #region Properties
@@ -33,14 +35,24 @@ namespace Steer73.FormsApp.ViewModels
                 OnPropertyChanged(nameof(IsBusy));
             }
         }
-        private bool showUser;
-        public bool ShowUser
+        private string emptyUser;
+        public string EmptyUser
         {
-            get => showUser;
+            get => emptyUser;
             set
             {
-                showUser = value;
-                OnPropertyChanged(nameof(ShowUser));
+                emptyUser = value;
+                OnPropertyChanged(nameof(EmptyUser));
+            }
+        }
+        private bool isRefreshing;
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            set
+            {
+                isRefreshing = value;
+                OnPropertyChanged(nameof(IsRefreshing));
             }
         }
         private ObservableCollection<User> users;
@@ -56,12 +68,25 @@ namespace Steer73.FormsApp.ViewModels
 
         #endregion
 
+        #region Commands
+        public Command RefreshCommand { get; }
+        #endregion
+        private async Task RefreshCommandExecute()
+        {
+            IsRefreshing = true;
+            await Task.Delay(100);
+
+            await Initialize();
+
+            IsRefreshing = false;
+        }
+
         public async Task Initialize()
         {
             try
             {
                 IsBusy = true;
-                ShowUser = false;
+                EmptyUser = "Fetching user. Please wait...";
 
                 //delay task for 2secs to show the loader before showing the list
                 await Task.Delay(2000);
@@ -76,13 +101,17 @@ namespace Steer73.FormsApp.ViewModels
                         user.FullName = $"{user.FirstName} {user.LastName}";
                         user.Initial = $"{user.FirstName.Substring(0, 1).ToUpper()}{user.LastName.Substring(0, 1).ToUpper()}";
                     }
-                    Users = new ObservableCollection<User>(users);
 
-                    ShowUser = true;
+                    //order the list alphabetically using OrderByDescending(Linq)
+                    var ordered = users.OrderByDescending(v => v.FullName.StartsWith("A"))
+                        .ThenBy(v => v.FullName);
+                    Users = new ObservableCollection<User>(ordered);
+
                 }
                 else
                 {
-                    ShowUser = false;
+                    //inform user there's no item in the user list
+                    EmptyUser = "No user found.";
                 }
             }
             catch (Exception ex)
@@ -94,8 +123,5 @@ namespace Steer73.FormsApp.ViewModels
                 IsBusy = false;
             }
         }
-
-
-        //public ICollection<User> Users { get; } = new List<User>();
     }
 }

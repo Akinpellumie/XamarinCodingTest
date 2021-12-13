@@ -22,19 +22,17 @@ namespace Steer73.FormsApp.Tests.ViewModels
                 userService.Object,
                 messageService.Object);
 
+            //act
             userService
                 .Setup(p => p.GetUsers())
                 .Returns(Task.FromResult(Enumerable.Empty<User>()))
                 .Verifiable();
 
-            //act
             await viewModel.Initialize();
 
+            //verify that the service was called
             userService.VerifyAll();
 
-            // Assert
-            //Assert.IsTrue(!result.IsError, result.ErrorMessage);
-            //Console.WriteLine(JsonConvert.SerializeObject(result.Result));
         }
 
         [Test]
