@@ -28,11 +28,18 @@ namespace Steer73.FormsApp.Tests.ViewModels
                 .Returns(Task.FromResult(Enumerable.Empty<User>()))
                 .Verifiable();
 
-            await viewModel.Initialize();
+            Task.Run(async () =>
+            {
+                await viewModel.Initialize();
+            }).GetAwaiter().GetResult();
 
-            //verify that the service was called
+            //verify that the service was called.
+            //note that verifyAll will assert that all setUp calls were actually called
             userService.VerifyAll();
 
+            //assert that the call paased without any exceptions.
+            //assert will verify that all methods are called and no exception occured
+            Assert.Pass();
         }
 
         [Test]
