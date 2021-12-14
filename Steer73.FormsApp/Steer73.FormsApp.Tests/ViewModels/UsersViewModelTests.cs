@@ -37,8 +37,7 @@ namespace Steer73.FormsApp.Tests.ViewModels
             //note that verifyAll will assert that all setUp calls were actually called
             userService.VerifyAll();
 
-            //assert that the call paased without any exceptions.
-            //assert will verify that all methods are called and no exception occured
+            //assert will verify and confirm that the call passed without exceptions.
             Assert.Pass();
         }
 
